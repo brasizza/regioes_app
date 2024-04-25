@@ -1,21 +1,22 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/database/database.dart';
 import '../../../core/database/database_mysql_impl.dart';
 import '../../models/estado_model.dart';
 import 'estado_repository.dart';
 
 class EstadoRepositoryImpl implements EstadoRepository {
   final Dio _dio;
-  final MysqlDatabase _database;
+  final Database _database;
 
-  EstadoRepositoryImpl({required Dio dio, required MysqlDatabase database})
+  EstadoRepositoryImpl({required Dio dio, required Database database})
       : _dio = dio,
         _database = database;
 
   @override
   Future<List<EstadoModel>> getEstados() async {
     final urlEstados = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
-    final estadosDatabase = await _database.getData("Select * From estados");
+    final estadosDatabase = await _database.getData("estados");
     if (estadosDatabase?.isNotEmpty ?? false) {
       return (estadosDatabase)!.map((estado) => EstadoModel.fromMap(estado)).toList();
     }
