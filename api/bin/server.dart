@@ -1,0 +1,35 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart';
+import 'package:shelf_router/shelf_router.dart';
+
+import ' lib/src/core/database/database_mysql_impl.dart';
+import ' lib/src/routes/ibge_routes.dart';
+
+void main(List<String> args) async {
+  final MysqlDatabase mysql = await MysqlDatabase.i.openDatabase({
+    "host": "127.0.0.1",
+    "port": "3306",
+    "userName": "root",
+    "password": "gramP0la",
+    "databaseName": "ibge",
+    "secure": true,
+  });
+
+  GetIt.I.registerLazySingleton(() => Dio());
+  GetIt.I.registerLazySingleton<MysqlDatabase>(() => mysql);
+  // Use any available host or container IP (usually `0.0.0.0`).
+  final ip = InternetAddress.anyIPv4;
+
+  final Router router = Router();
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler(IbgeRoutes.routes(
+        router,
+      ).call);
+  // For running in containers, we respect the PORT environment variable.
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+  final server = await serve(handler, ip, port);
+  print('Server listening on port ${server.port}');
+}
