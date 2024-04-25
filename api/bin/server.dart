@@ -6,17 +6,18 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import ' lib/src/core/consts/consts.dart';
 import ' lib/src/core/database/database_mysql_impl.dart';
 import ' lib/src/routes/ibge_routes.dart';
 
 void main(List<String> args) async {
   final MysqlDatabase mysql = await MysqlDatabase.i.openDatabase({
-    "host": "127.0.0.1",
-    "port": "3306",
-    "userName": "root",
-    "password": "gramP0la",
-    "databaseName": "ibge",
-    "secure": true,
+    "host": Consts.host,
+    "port": Consts.port,
+    "userName": Consts.userName,
+    "password": Consts.password,
+    "databaseName": Consts.database,
+    "secure": Consts.secure,
   });
 
   GetIt.I.registerLazySingleton(() => Dio());
