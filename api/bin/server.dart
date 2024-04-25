@@ -6,19 +6,14 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import ' lib/src/core/consts/consts.dart';
 import ' lib/src/core/database/database.dart';
+import ' lib/src/core/database/database_mysql_impl.dart';
 import ' lib/src/core/database/file_store_database_impl.dart';
 import ' lib/src/routes/ibge_routes.dart';
 
 void main(List<String> args) async {
-  // final MysqlDatabase database = await MysqlDatabase.i.openDatabase({
-  //   "host": Consts.host,
-  //   "port": Consts.port,
-  //   "userName": Consts.userName,
-  //   "password": Consts.password,
-  //   "databaseName": Consts.database,
-  //   "secure": Consts.secure,
-  // });
+  // final MysqlDatabase database = await MysqlDatabase.i.openDatabase({"host": Consts.host, "port": Consts.port, "userName": Consts.userName, "password": Consts.password, "databaseName": Consts.database, "secure": Consts.secure});
   final Database database = FileStoreDatabase.i;
   GetIt.I.registerLazySingleton(() => Dio());
   GetIt.I.registerLazySingleton<Database>(() => database);

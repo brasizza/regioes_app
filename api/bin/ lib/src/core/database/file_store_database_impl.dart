@@ -66,7 +66,6 @@ class FileStoreDatabase implements Database {
   @override
   Future<int> insertAll<T>({required String tableName, required List<T> value, bool clear = false}) async {
     await File("$basePath/$tableName.json").writeAsString(json.encode(value));
-
     return 1;
   }
 }
